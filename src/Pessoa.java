@@ -3,7 +3,7 @@ import java.util.Random;
 
 public class Pessoa implements Observer{
     private String name;
-    private String signatureType; //Maybe
+    private String signatureType; // 'fds' | 'mensal' | 'semanal'
     private boolean queroSair = false;
     private Random gerador = new Random();
 
@@ -22,13 +22,13 @@ public class Pessoa implements Observer{
         queroSair =  gerador.nextDouble() >= 0.9;
     }
 
-    public boolean queroSair()
-    {
-        return this.queroSair;
-    }
-
     public String getSignatureType()
     {
         return signatureType;
+    }
+
+    public boolean queroSair()
+    {
+        return this.queroSair;
     }
 }

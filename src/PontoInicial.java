@@ -6,5 +6,8 @@ public class PontoInicial {
         estadao.addObserver(new Pessoa("Joao", "fds"));
         estadao.iniciar();
 
+        Entregavel marieClaire = new Entregavel();
+        marieClaire.addObserver(new Pessoa('Maria', 'semanal'));
+        marieClaire.iniciar();
     }
 }

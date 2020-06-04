@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Calendar;
-
+import java.util.Random;
 
 public class Entregavel implements Subject{
     private String conteudo;
@@ -12,6 +12,8 @@ public class Entregavel implements Subject{
     //Método para adicionar novos assinates
     @Override
     public void addObserver(Observer o) {
+
+        //Verificação da assinatura
         observers.add(o);
     }
 
@@ -22,28 +24,78 @@ public class Entregavel implements Subject{
 
     //Falta implementar a verificação de dias da semana e assinaturas
     @Override
-    public void notifyObserver() {
+    public void notifyObserver(Calendar myDate) {
         List <Observer> aux = new ArrayList<>();
+
+        //Dia da Semana
+        int dow = myDate.get (Calendar.DAY_OF_WEEK);
+
+        boolean isWeekend = ((dow >= Calendar.SATURDAY) && (dow <= Calendar.SUNDAY));
+        boolean isMonday = dow >= Calendar.MONDAY;
+        boolean isFirstDay  = (myDate.get(Calendar.DAY_OF_MONTH) == 1);
+
         for(Observer o : observers)
         {
-            //Verificar Assinatura
-            o.update(conteudo);
+            String sigType = ((Pessoa)o).getSignatureType();
 
+            //Monthly
+            if(sigType.equals("monthly") && isFirstDay) { o.update(conteudo); }
+
+            //Weekend
+            if(sigType.equals("weekend") && isWeekend){ o.update(conteudo); }
+
+            //Weekly
+            if(sigType.equals("weekly") && isMonday) { o.update(conteudo); }
+
+            //Daily
+            if(sigType.equals("daily")) { o.update(conteudo); }
+
+            //Verifica se o assinate deseja continuar com a assinatura
             if(!((Pessoa)o).queroSair())
             {
                 aux.add(o);
-            }
-        }
+            }}
+
         observers.clear();
         observers.addAll(aux);
     }
 
-    //Falta implementars
+    //Função para gerar strings aleatórias
+    private String randomString() {
+
+        int leftLimit = 97; // Letra 'a'
+        int rightLimit = 122; // Letra 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int)
+                    (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        String generatedString = buffer.toString();
+
+        return generatedString;
+    }
+
     public void iniciar()
     {
-        System.out.println("Iniciando a porra todaaaa!!!");
+        System.out.println("Starting...");
 
-        //Caso não haja mais observers
-        System.out.println("Faliu");
+        Calendar myDate = Calendar.getInstance();
+
+        while(!observers.isEmpty())
+        {
+            //Gera conteudo com strings random
+            this.conteudo =  randomString();
+
+            // Notifica os observers
+            notifyObserver(myDate);
+
+            //Próxima data
+            myDate.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        System.out.println("Faliu :(");
     }
 }
