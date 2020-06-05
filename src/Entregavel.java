@@ -27,21 +27,15 @@ public class Entregavel implements Subject{
         //Dia da Semana
         int dow = myDate.get (Calendar.DAY_OF_WEEK);
 
-        boolean isWeekend = ((dow >= Calendar.SATURDAY) && (dow <= Calendar.SUNDAY));
+        boolean isWeekend = ((dow == Calendar.SATURDAY) || (dow == Calendar.SUNDAY));
         boolean isMonday = dow >= Calendar.MONDAY;
-        boolean isFirstDay  = (myDate.get(Calendar.DAY_OF_MONTH) == 1);
 
         for(Observer o : observers)
         {
             String sigType = ((Pessoa)o).getSignatureType();
 
-            System.out.println(sigType);
-
-            //Monthly
-            if(sigType.equals("monthly") && isFirstDay) { o.update(conteudo); }
-
             //Weekend
-            else if(sigType.equals("weekend") && isWeekend){ o.update(conteudo); }
+            if(sigType.equals("weekend") && isWeekend){ o.update(conteudo); }
 
             //Weekly
             else if(sigType.equals("weekly") && isMonday) { o.update(conteudo); }
@@ -49,7 +43,7 @@ public class Entregavel implements Subject{
             //Daily
             else if(sigType.equals("daily")) { o.update(conteudo); }
 
-            else { System.out.println("Assinatura não encontrada"); }
+            else { ; }
 
             //Verifica se o assinate deseja continuar com a assinatura
             if(!((Pessoa)o).queroSair())
@@ -100,7 +94,7 @@ public class Entregavel implements Subject{
             }
             else
             {
-                System.out.println("Faliu :(");
+                System.out.println("\n\nFaliu :(\n");
                 break;
             }
         }

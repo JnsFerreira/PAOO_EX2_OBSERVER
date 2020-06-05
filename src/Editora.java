@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Editora extends Entregavel{
 
     private String name;
-    private ArrayList singnaturesTypes;
+    private final ArrayList singnaturesTypes;
 
     public Editora(String name, ArrayList singnaturesTypes)
     {
@@ -11,8 +11,13 @@ public class Editora extends Entregavel{
         this.singnaturesTypes =  singnaturesTypes;
     }
 
-    public ArrayList getSingnaturesTypes()
+    public void novoAssinante(Observer e)
     {
-        return this.singnaturesTypes;
+        String sigType = ((Pessoa)e).getSignatureType();
+
+        if(singnaturesTypes.contains(sigType))
+        {
+            super.addObserver(e);
+        }
     }
 }
