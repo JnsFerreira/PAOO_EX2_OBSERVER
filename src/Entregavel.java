@@ -12,8 +12,6 @@ public class Entregavel implements Subject{
     //Método para adicionar novos assinates
     @Override
     public void addObserver(Observer o) {
-
-        //Verificação da assinatura
         observers.add(o);
     }
 
@@ -22,7 +20,6 @@ public class Entregavel implements Subject{
         observers.remove(o);
     }
 
-    //Falta implementar a verificação de dias da semana e assinaturas
     @Override
     public void notifyObserver(Calendar myDate) {
         List <Observer> aux = new ArrayList<>();
@@ -38,17 +35,21 @@ public class Entregavel implements Subject{
         {
             String sigType = ((Pessoa)o).getSignatureType();
 
+            System.out.println(sigType);
+
             //Monthly
             if(sigType.equals("monthly") && isFirstDay) { o.update(conteudo); }
 
             //Weekend
-            if(sigType.equals("weekend") && isWeekend){ o.update(conteudo); }
+            else if(sigType.equals("weekend") && isWeekend){ o.update(conteudo); }
 
             //Weekly
-            if(sigType.equals("weekly") && isMonday) { o.update(conteudo); }
+            else if(sigType.equals("weekly") && isMonday) { o.update(conteudo); }
 
             //Daily
-            if(sigType.equals("daily")) { o.update(conteudo); }
+            else if(sigType.equals("daily")) { o.update(conteudo); }
+
+            else { System.out.println("Assinatura não encontrada"); }
 
             //Verifica se o assinate deseja continuar com a assinatura
             if(!((Pessoa)o).queroSair())
@@ -85,17 +86,23 @@ public class Entregavel implements Subject{
 
         Calendar myDate = Calendar.getInstance();
 
-        while(!observers.isEmpty())
+        while(true)
         {
-            //Gera conteudo com strings random
-            this.conteudo =  randomString();
+            if(!observers.isEmpty()) {
+                //Gera conteudo com strings random
+                this.conteudo = randomString();
 
-            // Notifica os observers
-            notifyObserver(myDate);
+                // Notifica os observers
+                notifyObserver(myDate);
 
-            //Próxima data
-            myDate.add(Calendar.DAY_OF_YEAR, 1);
+                //Próxima data
+                myDate.add(Calendar.DAY_OF_YEAR, 1);
+            }
+            else
+            {
+                System.out.println("Faliu :(");
+                break;
+            }
         }
-        System.out.println("Faliu :(");
     }
 }
